@@ -68,8 +68,6 @@ sql.connect(test.sqlConfig, function (req, res) {
         })
     })
     app.get("/employees", (req, res) => {
-        //let veg = req.params.vegetable;
-        //res.send(`this is the page for ${veg}`);
         var request = new sql.Request();
         request.query("select * from Employees", function (err, results) {
             //console.log(results);
@@ -88,7 +86,7 @@ sql.connect(test.sqlConfig, function (req, res) {
         //let veg = req.params.vegetable;
         //res.send(`this is the page for ${veg}`);
         var request = new sql.Request();
-        request.query("select * from OrderList", function (err, results) {
+        request.query("select * from Test", function (err, results) {
             res.json(results.recordset);
         })
     })
@@ -103,7 +101,7 @@ sql.connect(test.sqlConfig, function (req, res) {
                 northwindData: someData
             });
 
-        }) //imagine from DB
+        }) 
     })
 
 
@@ -112,22 +110,13 @@ sql.connect(test.sqlConfig, function (req, res) {
     }));
 
     app.post('/register', function (req, res) {
-        var ProductName = req.body.ProductName;
-        var UnitPrice = req.body.UnitPrice;
-        var ProductID = req.body.ProductID;
-
+        var email = req.body.email;    
         var request = new sql.Request();
-        var statement = 'INSERT INTO OrderList(ProductID,ProductName,UnitPrice,UnitsInStock) VALUES(@ProductName,@ProductName,@UnitPrice,1)'
-        request.input("ProductID", ProductID);
-        request.input("ProductName", ProductName);
-        request.input("UnitPrice", UnitPrice);
+        var statement = 'INSERT INTO Test(email) VALUES(@email)'
+        request.input("email", email);
 
         request.query(statement, function (err, results) {
-
         })
-
-
-
 
 
 

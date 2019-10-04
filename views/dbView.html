@@ -49,22 +49,28 @@
 
     <div class="tab-pane " id="nav-data" role="tabpanel" aria-labelledby="nav-data-tab">
       <div class="container">
-        <h1 class="display-4">Make your Order!</h1>
+        <h1 class="display-4">Our Products</h1>
         <button type="button" class="btn btn-info float-right" data-toggle="modal" data-target="#exampleModal">
-            See your current order
+           Subcribe to keep up to date!
           </button>
+          <button type="button" class="btn btn-info float-left" data-toggle="modal" data-target="#exampleModal2">
+              Check whos Sucbribed
+             </button>
           
           <!-- Modal -->
           <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Current Orders</h5>
+                  <h5 class="modal-title" id="exampleModalLabel"> Subscribe</h5>
                   <button type="button" class="close " data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
-                <div class="modal-body" id ="order">
+                <form method="POST" action='/register'>
+                  <input type="text" name="email" class="form" placeholder="Enter Your Email">
+                  <button class ="btn btn-success" id ="addBtn">Join Now</button>
+                 </form>
                 
                 </div>
                 <div class="modal-footer">
@@ -72,6 +78,24 @@
                 </div>
               </div>
             </div>
+               <!-- Modal -->
+          <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"> Who has joined</h5>
+                    <button type="button" class="close " data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                 <div id="order"></div>
+                  
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
           </div>
         <!-- <canvas class="display-4" id="myChart4" style="float:right;"></canvas>  -->
         <div id="output2"></div>
@@ -101,20 +125,19 @@
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
   </script>
   <script>
+      
     $("#addBtn").click(function () {
+      var ProdID = $(this).attr("id");
       var postAPI = "/register"
-      var theID = $("#theID").val();
-      var theName = $("theName").val();
-      console.log("asd")
+      var theID = $("#email").val();
 
-      var theDB = <%-northwindData %>;
-      var index = theDB.findIndex(x => x.ProductName === theName);
-      var theVal = theDB[index].UnitPrice;
+      var theDB = <%- northwindData %>;
+      var index = theDB.findIndex(x => x.email === theID);
+  
 
       $.post(postAPI, {
-        ProductID: theID,
-        ProductName: theName,
-        UnitPrice: theVal
+        email: theID,
+      
       });
     })
   </script>

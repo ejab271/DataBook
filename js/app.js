@@ -42,7 +42,7 @@ $("#generateyear").click(function () {
     var ctx = document.getElementById('myChart').getContext('2d');
     var chart = new Chart(ctx, {
       // The type of chart we want to create
-      type: 'bar',
+      type: 'line',
 
       // The data for our dataset
       data: {
@@ -85,35 +85,25 @@ $("#generateyear").click(function () {
 //
 
 $.get("https://prodapi.metweb.ie/observations/phoenix-park/today", function (data, status, jqxhr) {
-  var fullList = "";
   var title = "";
-  //var theJsonObject = JSON.parse(data)
-  /*fullList += `<table style="width: 100%;">
-                <tr> <th> Time</th> <th> Date</th> <th> Temperature </th>`;*/
-  var dataSet = [];
-  var dataAct = [];
-  var i = 0;
-  //console.log(data);
-  //for weather
+  var dataSet = []; // array for the Time
+  var dataAct = []; // array for the Temperature
+  var i = 0; // Used to go through the array
+  
+  //filling the arrays with the values from the API
   for (let {
       reportTime,
       date,
       temperature
     } of data) {
 
-
-    fullList += `<tr>`;
-    fullList += `<td> ${reportTime} </td> <td> ${date} </td> <td> ${temperature} </td> `;
-    fullList += `</tr>`;
     title = date;
-    dataSet[i] = reportTime;
-    dataAct[i] = temperature;
-    i++;
-
+    dataSet.push(reportTime);
+    dataAct.push(temperature);
+    
   }
 
-
-
+//Creation of the Chart for Weather
   var ctx = document.getElementById('myChart1').getContext('2d');
   var chart = new Chart(ctx, {
     // The type of chart we want to create
@@ -175,6 +165,7 @@ $.get("http://feed2.conygre.com/API/StockFeed/GetSymbolList", function (data, st
 //------------------------------------------------------------------------------
 //$("#cmdgetstockvalues").click(function(){ ... }); //this is the button code before it gets filled
 //flip, I'd forgotten the # sign above.  Not a good sign for a musician... :-(
+
 $("#cmdgetstockvalues").click(function () {
   var symbolToGet = $("#theDDL").val();
   var numberOfValuesToGet = $("#txtnumberofvalues").val();
@@ -191,17 +182,7 @@ $("#cmdgetstockvalues").click(function () {
     $("#stockTitle").append(data[0].CompanyName + "<br/>"); //sanity check
 
     var intNumberOfValuesToGet = parseInt(numberOfValuesToGet);
-    //now loop through the prices to display them like this:
-    // 0: €123.45
-    // 1: €123.99
-    //etc
-    //redundant - replaced by a table, below
-    // for(var i=0; i<intNumberOfValuesToGet; i++)
-    // {
-    //     $("#resultsdiv").append(i + ': ' + data[i].tradeTime + ': &euro;' + data[i].Price + '<br/>');
-    // }
-
-    //now a html table: (and maybe a tables.js to follow...)
+  
     var thetable = "<table id='thetable' class='table table-bordered' id='dataTable' width='100%' cellspacing='0' border=1>";
     thetable += "<thead><tr><th>Item</th><th>Time</th><th>Price</th></tr></thead>";
     thetable += "<tbody>";
@@ -260,7 +241,7 @@ $.get("http://127.0.0.1:3000/products", function (data, status, jqxhr) {
   var dataVal = [];
   var i = 0;
   fullList += `<table id='thetable' class='table table-bordered' id='dataTable' width='100%' cellspacing='0' border=1>
-              <thead><tr> <th> ProductID </th> <th> Product Name</th> <th> Price </th> <th> Order </th> </tr></thead><tbody>`;
+              <thead><tr> <th> ProductID </th> <th> Product Name</th> <th> Price </th></tr></thead><tbody>`;
   for (let {
       ProductID,
       ProductName,
@@ -270,14 +251,13 @@ $.get("http://127.0.0.1:3000/products", function (data, status, jqxhr) {
     // fullList += SymbolID + " - " + Symbol + " - " + CompanyName + "<br/>";
     fullList += `<tr>`;
     fullList += `<form>`;
-    fullList += `<td id ="theID" > ${ProductID} </td> <td id ="theName"> ${ProductName} </td> <td id ="thePrice"> ${UnitPrice} </td><td> `
-    fullList += `<button class="btn btn-success" id ='addBtn' value ='${ProductName}'>Add</button>`;
-    fullList += `</form> </td> </tr>`;
+    fullList += `<td id ="theID" > ${ProductID} </td> <td id ="theName"> ${ProductName} </td> <td id ="thePrice"> ${UnitPrice} </td> `
+    fullList += ` </tr>`;
     dataSet[i] = ProductName;
     dataVal[i] = UnitPrice;
     i++;
   }
-  fullList += `</tbody><tfoot><tr> <th> ProductID </th> <th> Product Name</th> <th> Price </th> <th> Order </th> </tr></tfoot></table>`;
+  fullList += `</tbody><tfoot><tr> <th> ProductID </th> <th> Product Name</th> <th> Price </th>  </tr></tfoot></table>`;
   $("#output2").append(fullList);
   $("#thetable").DataTable();
 
@@ -290,22 +270,19 @@ $.get("http://127.0.0.1:3000/orderlist", function (data, status, jqxhr) {
   var dataVal = [];
   var i = 0;
   fullList += `<table id='thetable' class='table table-bordered' id='dataTable' width='100%' cellspacing='0' border=1>
-              <thead><tr> <th> ProductID </th> <th> Product Name</th> <th> Price </th> <th>Quantity</th> </tr></thead><tbody>`;
+              <thead><tr> <th> Email </th> </tr><tbody>`;
   for (let {
-      ProductID,
-      ProductName,
-      UnitPrice,UnitsInStock
+      email
+   
 
     } of data) {
     // fullList += SymbolID + " - " + Symbol + " - " + CompanyName + "<br/>";
     fullList += `<tr>`;
-    fullList += `<td id ="theID" > ${ProductID} </td> <td id ="theName"> ${ProductName} </td> <td id ="thePrice"> ${UnitPrice} </td><td> ${UnitsInStock} `
+    fullList += `<td id ="theID" > ${email} </td> `
     fullList += ` </td> </tr>`;
-    dataSet[i] = ProductName;
-    dataVal[i] = UnitPrice;
-    i++;
+ 
   }
-  fullList += `</tbody><tfoot><tr> <th> ProductID </th> <th> Product Name</th> <th> Price </th> <th> Quantity </th> </tr></tfoot></table>`;
+  fullList += `</tbody><tfoot><tr> <th> Email </th>  </tr></tfoot></table>`;
   $("#order").append(fullList);
   $("#thetable").DataTable();
 
@@ -337,3 +314,4 @@ $.get("http://127.0.0.1:3000/employees", function (data, status, jqxhr) {
 
   $("#output3").append(fullList);
 });
+
